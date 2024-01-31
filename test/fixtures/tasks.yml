@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  event_name: MyString
+  event_location: MyString
+  google_link: MyString
+  date: MyString
+  time: MyString
+  other_instruction: MyText
+  points: MyString
+
+two:
+  event_name: MyString
+  event_location: MyString
+  google_link: MyString
+  date: MyString
+  time: MyString
+  other_instruction: MyText
+  points: MyString
