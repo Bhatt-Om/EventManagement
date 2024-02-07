@@ -81,12 +81,14 @@ class Api::V1::UsersController < ApplicationController
       render(json: {
         user: {
           email: user.email,
+          role: user.role,
           access_token: token.token,
-          expires_in: token.expires_in
+          expires_in: token.expires_in,
+          success: true
          }
          })
     else
-      render json: { message: 'Invalid credentials' }, status: :ok
+      render json: { message: 'Invalid credentials', success: false }, status: 401
     end
   end
 

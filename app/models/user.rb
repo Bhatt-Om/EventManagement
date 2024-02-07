@@ -9,4 +9,8 @@ class User < ApplicationRecord
     user = find_by(email: email.downcase)
     user if user&.valid_password?(password)
   end
+
+  def is_admin?
+    role == 'admin'
+  end
 end

@@ -87,7 +87,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_29_115853) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.string "role"
+    t.string "role", default: "volunteer"
     t.string "otp"
     t.string "points"
     t.string "redeemed"
