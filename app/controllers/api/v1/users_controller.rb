@@ -8,10 +8,10 @@ class Api::V1::UsersController < ApplicationController
     render json: { message: 'client credentails', client_id: client_id, client_secret: client_secret, success: true }, status: :ok
   end
 
-  def show
-    user = User.find_by(id: Doorkeeper::AccessToken.find_by(token: params[:access_token]).resource_owner_id )
-    render json: { message: 'user details', user: user}, status: :ok
-  end
+  # def show
+  #   user = User.f ind_by(id: Doorkeeper::AccessToken.find_by(token: params[:access_token]).resource_owner_id )
+  #   render json: { message: 'user details', user: user}, status: :ok
+  # end
 
   def find_user
     if params[:access_token]
@@ -95,7 +95,7 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:email, :password, :role, :points, :redeemed, :location)
+    params.require(:user).permit(:name, :mobile_number, :email, :password, :role, :points, :redeemed, :location)
   end
 
   def generate_refresh_token
