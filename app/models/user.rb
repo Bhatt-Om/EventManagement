@@ -1,5 +1,6 @@
 class User < ApplicationRecord
-  has_one_attached :aadhar_card
+  has_one_attached :aadhar_card, dependent: :destroy
+  has_one_attached :avatar, dependent: :destroy
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -12,5 +13,12 @@ class User < ApplicationRecord
 
   def is_admin?
     role == 'admin'
+  end
+
+  def as_json(options = {})
+    super(options).merge(
+        avatar_url: avatar.present? ? url_for(avatar) : '',
+        aadhar_card_url: aadhar_card.present? ? url_for(aadhar_card) : ''
+      )
   end
 end

@@ -32,6 +32,11 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  def send_otp
+    user = User.find_by(id: Doorkeeper::AccessToken.find_by(token: params[:access_token]).resource_owner_id)
+    UsermailerMailer.send_otp(user)
+  end
+
   def create
     user = User.new(user_params)
     client_app = Doorkeeper::Application.find_by(uid: params[:client_id])
@@ -53,15 +58,14 @@ class Api::V1::UsersController < ApplicationController
       #  role: user.role,
       render(json: {
                user: {
-                 id: user.id,
-                 email: user.email,
+                 user: user,
                  access_token: access_token.token,
                  token_type: 'bearer',
                  expires_in: access_token.expires_in,
                  refresh_token: access_token.refresh_token,
                  created_at: access_token.created_at.to_time.to_i
                 }
-                })
+      })
     else
       render(json: { error: user.errors.full_messages }, status: 422)
     end
@@ -92,10 +96,26 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  def update_profile
+    if params[:access_token]
+      user = User.find_by(id: Doorkeeper::AccessToken.find_by(token: params[:access_token]).resource_owner_id)
+      
+      binding.pry
+      
+      if user.update(user_params)
+        render json: { message: 'Updated Successfully', success: true }, status: 200
+      else
+        render json: { message: user.errors.full_messages.join(','), success: false }, status: 422
+      end
+    else
+      render json: { message: 'User not found', success: false }, status: 404
+    end
+  end
+
   private
 
   def user_params
-    params.require(:user).permit(:name, :mobile_number, :email, :password, :role, :points, :redeemed, :location)
+    params.require(:user).permit(:name, :mobile_number, :email, :password, :role, :points, :redeemed, :location, :residential_address, :avatar, :aadhar_card)
   end
 
   def generate_refresh_token

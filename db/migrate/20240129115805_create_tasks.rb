@@ -7,7 +7,7 @@ class CreateTasks < ActiveRecord::Migration[7.1]
       t.string :date
       t.string :time
       t.text :other_instruction
-      t.string :points
+      t.string :points, default: 0
 
       t.timestamps
     end

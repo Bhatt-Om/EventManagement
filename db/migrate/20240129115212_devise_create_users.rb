@@ -37,6 +37,9 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
       t.string :points
       t.string :redeemed
       t.string :location
+      t.string :name
+      t.string :mobile_number
+      t.text :residential_address
 
       t.timestamps null: false
     end
