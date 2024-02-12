@@ -1,7 +1,8 @@
 class UsermailerMailer < ApplicationMailer
   default from: "from@example.com"
-  def send_otp(user)
+  def send_otp(user, otp)
     @user = user
-    mail(to: user.email, subject: 'otp for login')
+    @otp = user.otp
+    mail(to: @user.email, subject: 'otp for login')
   end
 end
