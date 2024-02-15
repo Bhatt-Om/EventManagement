@@ -5,10 +5,10 @@ class Api::V1::ParticipateVolunteersController < ApplicationController
   def index
     participate_volunteer = ParticipateVolunteer.includes(:user, :task)
     if current_user.is_admin?
-      participate_volunteer = participate_volunteer.where(participate_request: params[:request_type]) if params[:request_type].present?
+      participate_volunteer = participate_volunteer.where(participate_request: params[:request_type]).order(id: :desc) if params[:request_type].present?
     else
       participate_volunteer = participate_volunteer.where(user_id: current_user.id)
-      participate_volunteer = participate_volunteer.where(participate_request: params[:request_type]) if params[:request_type].present?
+      participate_volunteer = participate_volunteer.where(participate_request: params[:request_type]).order(id: :desc) if params[:request_type].present?
     end
     render json: { message: 'List Of all Pending Or Approved Request', participate_volunteer: participate_volunteer, success: true }, status: 200
   end
