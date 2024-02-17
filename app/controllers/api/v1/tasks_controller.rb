@@ -2,7 +2,7 @@ class Api::V1::TasksController < ApplicationController
   before_action :only_for_admin, only: [:create, :update]
   
   def index
-    tasks = Task.all.order(id: :desc)
+    tasks = Task.includes(event_poster_attachment: :blob).all.order(id: :desc)
     render json: { message: 'All Task List', tasks: tasks, success: true }, status: 200
   end
 

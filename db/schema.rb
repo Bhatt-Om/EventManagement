@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_08_124910) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_15_063341) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -111,9 +111,22 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_08_124910) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "volunteer_presences", force: :cascade do |t|
+    t.bigint "participate_volunteer_id", null: false
+    t.integer "request_type", default: 0
+    t.integer "requst_status", default: 0
+    t.string "date"
+    t.string "time"
+    t.string "location"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["participate_volunteer_id"], name: "index_volunteer_presences_on_participate_volunteer_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "participate_volunteers", "tasks"
   add_foreign_key "participate_volunteers", "users"
+  add_foreign_key "volunteer_presences", "participate_volunteers"
 end
