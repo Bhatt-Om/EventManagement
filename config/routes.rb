@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       draw(:user)
       draw(:task)
       draw(:participate_volunteer)
+      draw(:volunteer_presences)
     end
   end
 end
