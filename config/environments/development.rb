@@ -1,6 +1,6 @@
 require "active_support/core_ext/integer/time"
-
 Rails.application.configure do
+  BASEURL = 'https://e707-2405-201-2026-3800-6d2d-114f-c8a0-69c9.ngrok-free.app'
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded any time
@@ -75,5 +75,5 @@ Rails.application.configure do
   config.action_controller.raise_on_missing_callback_actions = true
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   config.hosts << /[\w-]+\.ngrok-free\.app/
-  routes.default_url_options[:host] = 'http://localhost:3000'
+  routes.default_url_options[:host] = BASEURL
 end

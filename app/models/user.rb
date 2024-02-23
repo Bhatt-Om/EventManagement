@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_many :participate_volunteers, dependent: :destroy
   has_many :tasks, through: :participate_volunteers
+  has_many :volunteer_presences, through: :participate_volunteers
   has_one_attached :aadhar_card, dependent: :destroy
   has_one_attached :avatar, dependent: :destroy
   # Include default devise modules. Others available are:
