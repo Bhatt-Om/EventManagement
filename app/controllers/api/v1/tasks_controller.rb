@@ -2,8 +2,14 @@ class Api::V1::TasksController < ApplicationController
   before_action :only_for_admin, only: [:create, :update]
   
   def index
-    tasks = Task.includes(event_poster_attachment: :blob).all.order(id: :desc)
-    render json: { message: 'All Task List', tasks: tasks, success: true }, status: 200
+    if current_user
+      tasks_ids  = current_user.tasks.pluck(:id)
+      tasks = Task.includes(event_poster_attachment: :blob).all.order(id: :desc)
+      tasks = Task.includes(event_poster_attachment: :blob).where.not(id: tasks_ids).order(id: :desc) if tasks_ids.any?
+      render json: { message: 'All Task List', tasks: tasks, success: true }, status: 200
+    else
+      render json: { message: 'User Not Found', tasks: tasks, success: true }, status: 401
+    end
   end
 
   def create

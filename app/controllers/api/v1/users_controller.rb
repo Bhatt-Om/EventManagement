@@ -100,7 +100,10 @@ class Api::V1::UsersController < ApplicationController
   def update_profile
     if params[:access_token]
       user = User.find_by(id: Doorkeeper::AccessToken.find_by(token: params[:access_token])&.resource_owner_id)
-      if user&.update(user_params)
+      user.avatar.attach(user_params["avatar"]) if user_params["avatar"]
+      user.aadhar_card.attach(user_params["aadhar_card"]) if  user_params["aadhar_card"]
+    
+      if user.update(user_params.except(:avatar, :aadhar_card))
         render json: { message: 'Profile updated successfully.', success: true }, status: 200
       else
         render json: { message: 'Unable to update profile.', errors: user&.errors&.full_messages, success: false }, status: 422

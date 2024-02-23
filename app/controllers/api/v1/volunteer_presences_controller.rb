@@ -2,21 +2,24 @@ class Api::V1::VolunteerPresencesController < ApplicationController
   before_action :only_for_admin, only: %i[approved_request rejected_request]
   before_action :set_volunteer_presence, only: %i[update destroy]
   def index
-    volunteer_presences = VolunteerPresence.includes(:participate_volunteer)
+    volunteer_presences = VolunteerPresence.all
     if current_user.is_admin?
-      volunteer_presences = volunteer_presences.order(id: :desc)
+      volunteer_presences = volunteer_presences
     else
-      volunteer_presences = volunteer_presences.joins(:participate_volunteer).where(participate_volunteer: {user_id: current_user.id})
+      # volunteer_presences = volunteer_presences.joins(:participate_volunteer).where(participate_volunteer: {user_id: current_user.id})
+      volunteer_presences = current_user.volunteer_presences
     end
-
-    if params[:request_type].present? && params[:request_status].present?
-      volunteer_presences = volunteer_presences.where(request_type: params[:request_type], request_status: params[:request_status]).order(id: :desc)
-    end
+    volunteer_presences = volunteer_presences.includes(:participate_volunteer, upload_proof_attachment: :blob ).order(id: :desc)
     render json: { message: 'List Of Presence', volunteer_presences: volunteer_presences, success: true }, status: 200
   end
 
   def create
-    volunteer_presence = VolunteerPresence.new(volunteer_presence_params)
+    volunteer_presence = VolunteerPresence.find_or_initialize_by(volunteer_presence_params.except(:upload_proof))
+
+    if volunteer_presence.persisted?
+      return render json: { message: 'Already Uplodad' , success: true }, status: 200
+    end
+    volunteer_presence.upload_proof.attach(volunteer_presence_params['upload_proof']) if volunteer_presence_params['upload_proof']
     if volunteer_presence.save
       render json: { message: 'Success Fully Submited', success: true }, status: 200
     else
