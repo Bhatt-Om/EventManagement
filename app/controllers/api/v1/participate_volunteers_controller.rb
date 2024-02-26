@@ -1,16 +1,11 @@
 class Api::V1::ParticipateVolunteersController < ApplicationController
   before_action :only_for_admin, only: %i[approved_request rejected_request]
   before_action :set_participate_volunteer, only: %i[destroy approved_request rejected_request through_qr_code scan_qr_code]
+  has_scope :request_type
 
   def index
-    participate_volunteer = ParticipateVolunteer.all
-    if current_user.is_admin?
-      participate_volunteer = participate_volunteer.where(participate_request: params[:request_type]).order(id: :desc) if params[:request_type].present?
-    else
-      participate_volunteer = participate_volunteer.where(user_id: current_user.id)
-      participate_volunteer = participate_volunteer.where(participate_request: params[:request_type]).order(id: :desc) if params[:request_type].present?
-    end
-    participate_volunteer = participate_volunteer.includes(:user, :task, qr_code_attachment: :blob)
+    participate_volunteer = current_user.is_admin? ? ParticipateVolunteer.admin : ParticipateVolunteer.user(current_user.id)
+    participate_volunteer = apply_scopes(participate_volunteer).all.includes(:user, :task, qr_code_attachment: :blob)
     render json: { message: 'List Of all Pending Or Approved Request', participate_volunteer: participate_volunteer, success: true }, status: 200
   end
 

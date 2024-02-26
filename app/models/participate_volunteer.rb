@@ -5,6 +5,10 @@ class ParticipateVolunteer < ApplicationRecord
   has_one_attached :qr_code, dependent: :destroy
   enum participate_request: { pending: 0, approved: 1, rejected: 2 }
 
+  scope :admin, -> { all }
+  scope :user, -> user_id { where(user_id: user_id) }
+  scope :request_type, -> request_type { where(participate_request: request_type) }
+
   def as_json(options = {})
     super(options).merge(
       user: lambda { |u| u.slice('id', 'name', 'email', 'role', 'mobile_number') }.call(user),
