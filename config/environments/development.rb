@@ -1,6 +1,15 @@
 require "active_support/core_ext/integer/time"
 Rails.application.configure do
-  BASEURL = 'https://e707-2405-201-2026-3800-6d2d-114f-c8a0-69c9.ngrok-free.app'
+  config.after_initialize do
+    Bullet.enable        = true
+    Bullet.alert         = true
+    Bullet.bullet_logger = true
+    Bullet.console       = true
+    Bullet.rails_logger  = true
+    Bullet.add_footer    = true
+  end
+
+  BASEURL = 'https://7fef-2405-201-2026-3800-e178-c8d0-e243-9bbb.ngrok-free.app'
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded any time

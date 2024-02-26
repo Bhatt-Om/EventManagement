@@ -1,15 +1,12 @@
 class Api::V1::VolunteerPresencesController < ApplicationController
   before_action :only_for_admin, only: %i[approved_request rejected_request]
-  before_action :set_volunteer_presence, only: %i[update destroy]
+  before_action :set_volunteer_presence, only: %i[update destroy approved_request rejected_request]
+  has_scope :request_type
+  has_scope :requst_status
+
   def index
-    volunteer_presences = VolunteerPresence.all
-    if current_user.is_admin?
-      volunteer_presences = volunteer_presences
-    else
-      # volunteer_presences = volunteer_presences.joins(:participate_volunteer).where(participate_volunteer: {user_id: current_user.id})
-      volunteer_presences = current_user.volunteer_presences
-    end
-    volunteer_presences = volunteer_presences.includes(:participate_volunteer, upload_proof_attachment: :blob ).order(id: :desc)
+    volunteer_presences = current_user.is_admin? ? VolunteerPresence.all : current_user.volunteer_presences
+    volunteer_presences = apply_scopes(volunteer_presences).all.includes(participate_volunteer: [:user, :task, :qr_code_attachment], upload_proof_attachment: :blob ).order(id: :desc)
     render json: { message: 'List Of Presence', volunteer_presences: volunteer_presences, success: true }, status: 200
   end
 

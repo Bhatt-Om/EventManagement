@@ -1,7 +1,13 @@
 class VolunteerPresence < ApplicationRecord
   belongs_to :participate_volunteer
+  has_one :user, through: :participate_volunteer
+  has_one :task, through: :participate_volunteer
+  has_one :qr_code, through: :participate_volunteer, source: :qr_code_attachment
   has_one_attached :upload_proof, dependent: :destroy
   before_create :set_date_and_time
+
+  scope :request_type, -> request_type { where(request_type: request_type) }
+  scope :requst_status, -> (requst_status = 'pending') { where(requst_status: requst_status) }
 
   enum request_type: { upload_proof: 0, geo_location: 1, qr_code: 2 }
   enum requst_status: { pending: 0, approved: 1, rejected: 2 }
@@ -13,7 +19,6 @@ class VolunteerPresence < ApplicationRecord
     )
   end
 
-  private
   def set_date_and_time
     date = Date.today.strftime("%d/%m/%Y")
     time = Time.now.strftime('%H:%M:%S')
