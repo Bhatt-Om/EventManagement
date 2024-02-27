@@ -24,6 +24,8 @@ services:
       - DATABASE_URL=postgres://postgres:password@db:5432/postgres
     networks:
       - mynetwork
+    entrypoint: ["/app/entrypoint.sh"]
+    command: ["server"]
 
 volumes:
   dbdata:
