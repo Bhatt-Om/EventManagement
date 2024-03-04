@@ -9,6 +9,8 @@ class ParticipateVolunteer < ApplicationRecord
   scope :user, -> user_id { where(user_id: user_id) }
   scope :request_type, -> request_type { where(participate_request: request_type) }
 
+  after_update :update_score_of_user
+
   def as_json(options = {})
     super(options).merge(
       user: lambda { |u| u.slice('id', 'name', 'email', 'role', 'mobile_number') }.call(user),
@@ -42,5 +44,9 @@ class ParticipateVolunteer < ApplicationRecord
       resize_gte_to: false,
       size: 120,
     )
+  end
+
+  def update_score_of_user
+    
   end
 end

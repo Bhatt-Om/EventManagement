@@ -34,8 +34,8 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
 
       t.string :role, default: 'volunteer'
       t.string :otp
-      t.string :points
-      t.string :redeemed
+      t.string :points, default: "0"
+      t.string :redeemed, default: "0"
       t.string :location
       t.string :name
       t.string :mobile_number
