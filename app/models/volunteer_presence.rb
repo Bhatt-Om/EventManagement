@@ -20,7 +20,7 @@ class VolunteerPresence < ApplicationRecord
   end
 
   def set_date_and_time
-    date = Date.today.strftime("%d/%m/%Y")
-    time = Time.now.strftime('%H:%M:%S')
+    self.date = Date.today.strftime("%d/%m/%Y")
+    self.time = Time.now.strftime('%H:%M:%S')
   end
 end
