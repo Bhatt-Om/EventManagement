@@ -9,7 +9,7 @@ Rails.application.configure do
     Bullet.add_footer    = true
   end
 
-  BASEURL = 'https://7fef-2405-201-2026-3800-e178-c8d0-e243-9bbb.ngrok-free.app'
+  BASEURL = 'http://localhost:3000'
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded any time
