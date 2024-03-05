@@ -5,7 +5,7 @@ class Api::V1::ParticipateVolunteersController < ApplicationController
 
   def index
     participate_volunteer = current_user.is_admin? ? ParticipateVolunteer.admin : ParticipateVolunteer.user(current_user.id)
-    participate_volunteer = apply_scopes(participate_volunteer).all.includes(:user, :task, qr_code_attachment: :blob)
+    participate_volunteer = apply_scopes(participate_volunteer).all.includes(:user, :task, qr_code_attachment: :blob).order(id: :desc)
     render json: { message: 'List Of all Pending Or Approved Request', participate_volunteer: participate_volunteer, success: true }, status: 200
   end
 
