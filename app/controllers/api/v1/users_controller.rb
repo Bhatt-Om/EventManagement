@@ -1,10 +1,19 @@
 class Api::V1::UsersController < ApplicationController
-  skip_before_action :doorkeeper_authorize!
+  skip_before_action :doorkeeper_authorize!, except: %i[ index ]
   skip_before_action :verify_authenticity_token
 
   def app_creds
     client_id = Doorkeeper::Application.first.uid
     render json: { message: 'client credentials', client_id: client_id, success: true }, status: :ok
+  end
+
+  def index
+    if current_user.is_admin?
+      users = User.where(role: 'volunteer').includes(aadhar_card_attachment: :blob, avatar_attachment: :blob).order(id: :desc)
+      render json: { message: 'List Of All Users',  users: users, success: true }, status: :ok
+    else
+      render json: { message: 'You Are Not Authorize', success: false }, status: 401
+    end
   end
 
   def find_user
@@ -112,7 +121,7 @@ class Api::V1::UsersController < ApplicationController
       render json: { message: 'Please provide an access token.', success: false }, status: 422
     end
   end
-
+  
   private
 
   def user_params

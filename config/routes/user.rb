@@ -1,4 +1,4 @@
-resources :users, only: %i[create show] do
+resources :users, only: %i[index create show] do
   collection do
     get :find_user
     get :app_creds

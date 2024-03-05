@@ -3,6 +3,7 @@ class ParticipateVolunteer < ApplicationRecord
   belongs_to :user
   has_one :volunteer_presence, dependent: :destroy
   has_one_attached :qr_code, dependent: :destroy
+  has_one :event_poster, through: :task, source: :event_poster_attachment
   enum participate_request: { pending: 0, approved: 1, rejected: 2 }
 
   scope :admin, -> { all }
@@ -15,6 +16,7 @@ class ParticipateVolunteer < ApplicationRecord
     super(options).merge(
       user: lambda { |u| u.slice('id', 'name', 'email', 'role', 'mobile_number') }.call(user),
       task: lambda { |u| u.slice('id', 'event_name', 'event_location', 'google_link', 'date', 'time', 'points') }.call(task),
+      event_poster_url: task.event_poster.present? ? url_for(task.event_poster) : '',
       qr_code_url: qr_code.present? ? url_for(qr_code) : ''
     )
   end

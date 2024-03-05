@@ -49,7 +49,7 @@ class Api::V1::VolunteerPresencesController < ApplicationController
     if @volunteer_presence
       @volunteer_presence.update(requst_status: 1)
       @volunteer_presence.user.update(points: (@volunteer_presence.user.points.to_i - @volunteer_presence.task.points.to_i).to_s)
-      @volunteer_presence.user.update(redeemed: (@volunteer_presence.user.points.to_i + @volunteer_presence.task.points.to_i).to_s)
+      @volunteer_presence.user.update(redeemed: (@volunteer_presence.user.redeemed.to_i + @volunteer_presence.task.points.to_i).to_s)
       render json: { message: 'SuccessFully Approved', success: true }, status: 200
     else
       render json: { message: 'Not Found', success: false }, status: 404
