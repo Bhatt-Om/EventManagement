@@ -1,4 +1,4 @@
-sclass Api::V1::ParticipateVolunteersController < ApplicationController
+class Api::V1::ParticipateVolunteersController < ApplicationController
   before_action :only_for_admin, only: %i[approved_request rejected_request]
   before_action :set_participate_volunteer, only: %i[destroy approved_request rejected_request through_qr_code scan_qr_code]
   skip_before_action :doorkeeper_authorize!, only: %i[scan_qr_code]
