@@ -1,6 +1,6 @@
 class Api::V1::ParticipateVolunteersController < ApplicationController
   before_action :only_for_admin, only: %i[approved_request rejected_request]
-  before_action :set_participate_volunteer, only: %i[destroy approved_request rejected_request through_qr_code scan_qr_code]
+  before_action :set_participate_volunteer, only: %i[destroy approved_request rejected_request generate_qr scan_qr_code ]
   skip_before_action :doorkeeper_authorize!, only: %i[scan_qr_code]
   has_scope :request_type
 
@@ -42,7 +42,7 @@ class Api::V1::ParticipateVolunteersController < ApplicationController
     end
   end
 
-  def through_qr_code
+  def generate_qr
     if @participate_volunteer
       @participate_volunteer.generate_qr_code if @participate_volunteer.participate_request == 'approved'
       render json: { message: 'SuccessFully Generated QR', success: true }, status: 200

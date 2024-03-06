@@ -1,6 +1,6 @@
 class Api::V1::VolunteerPresencesController < ApplicationController
   before_action :only_for_admin, only: %i[approved_request rejected_request]
-  before_action :set_volunteer_presence, only: %i[update destroy approved_request rejected_request]
+  before_action :set_volunteer_presence, only: %i[update destroy approved_request rejected_request redeem_point]
   has_scope :request_type
   has_scope :requst_status
 
@@ -48,8 +48,6 @@ class Api::V1::VolunteerPresencesController < ApplicationController
   def approved_request
     if @volunteer_presence
       @volunteer_presence.update(requst_status: 1)
-      @volunteer_presence.user.update(points: (@volunteer_presence.user.points.to_i - @volunteer_presence.task.points.to_i).to_s)
-      @volunteer_presence.user.update(redeemed: (@volunteer_presence.user.redeemed.to_i + @volunteer_presence.task.points.to_i).to_s)
       render json: { message: 'SuccessFully Approved', success: true }, status: 200
     else
       render json: { message: 'Not Found', success: false }, status: 404
@@ -65,6 +63,22 @@ class Api::V1::VolunteerPresencesController < ApplicationController
       render json: { message: 'Not Found', success: false }, status: 404
     end
   end
+
+  def redeem_point
+    if @volunteer_presence
+      if @volunteer_presence.redeemed_points == false
+        @volunteer_presence.update(redeemed_points: true)
+        @volunteer_presence.user.update(points: (@volunteer_presence.user.points.to_i - @volunteer_presence.task.points.to_i).to_s)
+        @volunteer_presence.user.update(redeemed: (@volunteer_presence.user.redeemed.to_i + @volunteer_presence.task.points.to_i).to_s)
+        render json: { message: 'successfully redeemed', success: true }, status: 200
+      else
+        render json: { message: 'already redeemed', success: true }, status: 200
+      end
+    else
+      render json: { message: 'Not Found', success: false }, status: 404
+    end
+  end
+
 
   private
 

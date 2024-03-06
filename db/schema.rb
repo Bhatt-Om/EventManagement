@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_15_063341) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_06_101157) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -99,8 +99,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_15_063341) do
     t.datetime "remember_created_at"
     t.string "role", default: "volunteer"
     t.string "otp"
-    t.string "points"
-    t.string "redeemed"
+    t.string "points", default: "0"
+    t.string "redeemed", default: "0"
     t.string "location"
     t.string "name"
     t.string "mobile_number"
@@ -120,6 +120,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_15_063341) do
     t.string "location"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "redeemed_points", default: false
     t.index ["participate_volunteer_id"], name: "index_volunteer_presences_on_participate_volunteer_id"
   end
 

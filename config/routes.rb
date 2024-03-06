@@ -1,9 +1,10 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: {
+    passwords: 'user/passwords'
+  }
   use_doorkeeper do
     skip_controllers :authorizations, :applications, :authorized_applications
   end
-
   get "up" => "rails/health#show", as: :rails_health_check
 
   namespace :api do

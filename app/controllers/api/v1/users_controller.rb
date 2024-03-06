@@ -40,10 +40,9 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def send_otp
-    user = User.find_by(id: Doorkeeper::AccessToken.find_by(token: params[:access_token])&.resource_owner_id)
+    user = User.find_by(email: params[:email])
     user.update(otp: rand.to_s[2..5])
-    # Uncomment the line below if you have a mailer setup
-    # UsermailerMailer.send_otp(user)
+    UserMailer.send_otp(user, user.otp).deliver_now
     render json: { message: 'OTP sent successfully.', success: true }, status: :ok
   end
 
@@ -80,7 +79,8 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def login
-    user = User.authenticate!(params[:email], params[:password])
+    user = User.authenticate!(params[:email], params[:password], :password) if params[:password]
+    user = User.authenticate!(params[:email], params[:otp], :otp) if params[:otp]
 
     if user
       token = Doorkeeper::AccessToken.create!(

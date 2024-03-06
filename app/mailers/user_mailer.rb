@@ -1,5 +1,5 @@
-class UsermailerMailer < ApplicationMailer
-  default from: "from@example.com"
+class UserMailer < ApplicationMailer
+  default from: "chesscobra05@gmail.com"
   def send_otp(user, otp)
     @user = user
     @otp = user.otp

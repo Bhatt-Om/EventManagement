@@ -9,9 +9,25 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   
-  def self.authenticate!(email, password)
-    user = find_by(email: email.downcase)
-    user if user&.valid_password?(password)
+  def self.authenticate!(email, credential, credential_type)
+    user = find_by(email: email)
+
+    if user && user.valid_credential?(credential, credential_type)
+      user
+    else
+      nil
+    end
+  end
+
+  def valid_credential?(credential, credential_type)
+    case credential_type.to_sym
+    when :password
+      valid_password?(credential)
+    when :otp
+      self.otp == credential ? true : false
+    else
+      false
+    end
   end
 
   def is_admin?
