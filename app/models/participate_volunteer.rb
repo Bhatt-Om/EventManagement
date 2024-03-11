@@ -17,7 +17,8 @@ class ParticipateVolunteer < ApplicationRecord
       user: lambda { |u| u.slice('id', 'name', 'email', 'role', 'mobile_number') }.call(user),
       task: lambda { |u| u.slice('id', 'event_name', 'event_location', 'google_link', 'date', 'time', 'points') }.call(task),
       event_poster_url: task.event_poster.present? ? url_for(task.event_poster) : '',
-      qr_code_url: qr_code.present? ? url_for(qr_code) : ''
+      qr_code_url: qr_code.present? ? url_for(qr_code) : '',
+      volunteer_presence: volunteer_presence.present? ? true : false
     )
   end
   
