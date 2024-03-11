@@ -30,7 +30,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def forgot_password
-    user = User.find_by(email: params[:email])
+    user = User.find_by(email: params[:email].downcase)
     if user
       user.send_reset_password_instructions
       render json: { message: 'Reset Password instruction sent successfully.', success: true }, status: :ok
@@ -40,10 +40,14 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def send_otp
-    user = User.find_by(email: params[:email])
-    user.update(otp: rand.to_s[2..5])
-    UserMailer.send_otp(user, user.otp).deliver_now
-    render json: { message: 'OTP sent successfully.', success: true }, status: :ok
+    user = User.find_by(email: params[:email].downcase)
+    if user
+      user.update(otp: rand.to_s[2..5])
+      UserMailer.send_otp(user, user.otp).deliver_now
+      render json: { message: 'OTP sent successfully.', success: true }, status: :ok
+    else
+      render json: { message: 'User Not Found', success: false }, status: 404
+    end
   end
 
   def create

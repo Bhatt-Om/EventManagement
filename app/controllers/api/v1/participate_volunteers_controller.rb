@@ -25,9 +25,11 @@ class Api::V1::ParticipateVolunteersController < ApplicationController
 
   def approved_request
     if @participate_volunteer
-      @participate_volunteer.update(participate_request: 1)
-      @participate_volunteer.user.update(points: (@participate_volunteer.user.points.to_i + @participate_volunteer.task.points.to_i).to_s)
-      render json: { message: 'Approved The Request', success: true }, status: 200
+      ActiveRecord::Base.transaction do
+        @participate_volunteer.update(participate_request: 1)
+        @participate_volunteer.user.update(points: (@participate_volunteer.user.points.to_i + @participate_volunteer.task.points.to_i).to_s)
+        render json: { message: 'Approved The Request', success: true }, status: 200
+      end
     else
       render json: { message: 'Not Fond', suucess: false }, status: 404
     end

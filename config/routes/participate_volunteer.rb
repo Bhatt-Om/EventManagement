@@ -4,6 +4,5 @@ resources :participate_volunteers, only: %i[index create destroy] do
     post :scan_qr_code
     put :approved_request 
     put :rejected_request
-    put :redeem_point
   end
 end
