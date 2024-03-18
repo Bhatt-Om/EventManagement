@@ -1,0 +1,1 @@
+resources :user_roles, only: %i[index create update]
