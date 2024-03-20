@@ -40,7 +40,7 @@ class User < ApplicationRecord
 
   def as_json(options = {})
     super(options).merge(
-        role: user.role? ? role.role_name : '',
+        role: role.present? ? role.role_name : '',
         avatar_url: avatar.present? ? url_for(avatar) : '',
         aadhar_card_url: aadhar_card.present? ? url_for(aadhar_card) : ''
       )
