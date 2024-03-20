@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  booth_name: MyString
+  booth_number: MyString
+  booth_lat: 1.5
+  booth_lon: 1.5
+
+two:
+  booth_name: MyString
+  booth_number: MyString
+  booth_lat: 1.5
+  booth_lon: 1.5
