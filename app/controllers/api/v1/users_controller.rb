@@ -55,7 +55,6 @@ class Api::V1::UsersController < ApplicationController
     client_app = Doorkeeper::Application.find_by(uid: params[:client_id])
 
     return render(json: { error: 'Invalid client ID' }, status: 403) unless client_app
-
     if user.save
       access_token = Doorkeeper::AccessToken.create!(
         resource_owner_id: user.id,
@@ -129,7 +128,7 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :mobile_number, :email, :password, :role, :points, :redeemed, :location, :residential_address, :avatar, :aadhar_card)
+    params.require(:user).permit(:name, :mobile_number, :email, :password, :role_id, :points, :redeemed, :location, :residential_address, :avatar, :aadhar_card)
   end
 
   def generate_refresh_token
