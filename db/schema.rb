@@ -43,12 +43,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_20_100904) do
   end
 
   create_table "booths", force: :cascade do |t|
+    t.bigint "user_id"
     t.string "booth_name"
     t.string "booth_number"
     t.float "booth_lat"
     t.float "booth_lon"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_booths_on_user_id"
   end
 
   create_table "oauth_access_tokens", force: :cascade do |t|

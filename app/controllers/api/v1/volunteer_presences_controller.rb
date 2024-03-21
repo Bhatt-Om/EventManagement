@@ -11,11 +11,17 @@ class Api::V1::VolunteerPresencesController < ApplicationController
   end
 
   def create
-    volunteer_presence = VolunteerPresence.find_or_initialize_by(volunteer_presence_params.except(:upload_proof))
+    volunteer_presence = VolunteerPresence.find_or_initialize_by(volunteer_presence_params.slice(:participate_volunteer_id))
 
     if volunteer_presence.persisted?
       return render json: { message: 'Already Uplodad' , success: true }, status: 200
     end
+
+    volunteer_presence.assign_attributes(volunteer_presence_params.slice(
+      :request_type,
+      :requst_status,
+      :location
+    )) 
     volunteer_presence.upload_proof.attach(volunteer_presence_params['upload_proof']) if volunteer_presence_params['upload_proof']
     if volunteer_presence.save
       render json: { message: 'Success Fully Submited', success: true }, status: 200

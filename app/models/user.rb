@@ -5,6 +5,7 @@ class User < ApplicationRecord
   has_many :volunteer_presences, through: :participate_volunteers
   has_one_attached :aadhar_card, dependent: :destroy
   has_one_attached :avatar, dependent: :destroy
+  has_one :booth, dependent: :destroy
   after_initialize do |user|
     self.role_id ||= 2
   end
