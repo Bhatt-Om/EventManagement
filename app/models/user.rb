@@ -8,6 +8,8 @@ class User < ApplicationRecord
   after_initialize do |user|
     self.role_id ||= 2
   end
+
+  scope :not_admin, -> { where.not(role_id: Role.find_by(role_name: 'admin').id)}
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
