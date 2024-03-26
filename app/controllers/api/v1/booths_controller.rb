@@ -1,6 +1,6 @@
 class Api::V1::BoothsController < ApplicationController
-  before_action :only_for_admin, only: [:create, :update, :destroy]
-  before_action :set_booth, only: [:show, :update, :destroy]
+  before_action :only_for_admin, only: [:create, :update, :destroy, :booth_user_allocation]
+  before_action :set_booth, only: [:show, :update, :destroy, :booth_user_allocation]
   
   def index
     booths = Booth.all
@@ -36,6 +36,27 @@ class Api::V1::BoothsController < ApplicationController
     end
   end
 
+  def booth_user_allocation
+    if @booth
+      user = User.find_by(email: user_params[:email])
+      if user
+        user.update(role_id: user_params[:role_id])
+        @booth.update(user_id: user.id)
+        render json: { message: 'SuccessFully Assigned User'}
+      else
+        user = User.new(user_params)
+        if user.save
+          @booth.update(user_id: user.id)
+          render json: { message: 'SuccessFully Assigned User'}
+        else
+          render json: { message: user.errors.full_messages.join('')}
+        end
+      end
+    else
+      render json: { message: 'Booth Not Found', success: false }, status: 404
+    end
+  end
+
   def destroy
     if @booth
       @booth.destroy
@@ -48,6 +69,10 @@ class Api::V1::BoothsController < ApplicationController
   private
   def booth_params
     params.require(:booth).permit(:booth_name, :booth_number, :booth_lat, :booth_lon)
+  end
+
+  def user_params
+    params.require(:user).permit(:email, :name, :role_id, :password)
   end
 
   def set_booth
