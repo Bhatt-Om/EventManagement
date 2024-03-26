@@ -9,7 +9,7 @@ class Api::V1::UsersController < ApplicationController
 
   def index
     if current_user.is_admin?
-      users = User.not_admin.includes(aadhar_card_attachment: :blob, avatar_attachment: :blob).order(id: :desc)
+      users = User.not_admin.includes(:role, :booth, aadhar_card_attachment: :blob, avatar_attachment: :blob).order(id: :desc)
       render json: { message: 'List Of All Users',  users: users, success: true }, status: :ok
     else
       render json: { message: 'You Are Not Authorize', success: false }, status: 401

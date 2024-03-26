@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       draw(:participate_volunteer)
       draw(:volunteer_presences)
       draw(:booth_routes)
+      draw(:role_routes)
     end
   end
 end
