@@ -3,7 +3,7 @@ class Api::V1::BoothsController < ApplicationController
   before_action :set_booth, only: [:show, :update, :destroy, :booth_user_allocation]
   
   def index
-    booths = Booth.all
+    booths = Booth.includes(qr_code_attachment: :blob).all
     render json: { message: 'List Of All Booth', booths: booths, success: true }, status: 200
   end
 
@@ -68,7 +68,7 @@ class Api::V1::BoothsController < ApplicationController
 
   private
   def booth_params
-    params.require(:booth).permit(:booth_name, :booth_number, :booth_lat, :booth_lon)
+    params.require(:booth).permit(:booth_name, :booth_number, :booth_lat, :booth_lon, :qr_code)
   end
 
   def user_params
