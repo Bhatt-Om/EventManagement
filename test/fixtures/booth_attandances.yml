@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  booth: one
+  date: MyString
+  time: MyString
+  user_lat: 
+  user_lot: 
+
+two:
+  booth: two
+  date: MyString
+  time: MyString
+  user_lat: 
+  user_lot: 
