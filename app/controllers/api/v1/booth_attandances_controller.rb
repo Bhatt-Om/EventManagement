@@ -1,4 +1,5 @@
 class Api::V1::BoothAttandancesController < ApplicationController
+  skip_before_action :doorkeeper_authorize, only: %i[ scane_qr_code ]
   before_action :only_for_admin, only: %i[ update destroy approve_request rejecte_request ]
   before_action :set_booth_attandance, only: %i[ update destroy approve_request rejecte_request ]
 
