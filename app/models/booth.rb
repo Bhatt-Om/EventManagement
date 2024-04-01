@@ -1,5 +1,6 @@
 class Booth < ApplicationRecord
   belongs_to :user, optional: true
+  has_many :booth_attandances, dependent: :destroy
   has_one_attached :qr_code, dependent: :destroy
 
   after_create :generate_qr_code

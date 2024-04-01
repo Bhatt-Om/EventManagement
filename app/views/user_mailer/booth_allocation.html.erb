@@ -1,0 +1,15 @@
+<h1>Hello, <%= @user.name %></h1>
+  <p>We're happy to inform you that you have been assigned a booth</p>
+  <p>**Your Booth Details:**</p>
+  <% if @booth.booth_name %>
+    <p>Location: <%= @booth.booth_number %></p>
+  <% end %>
+  <% if @booth.booth_number %>
+    <p>Booth Number: <%= @booth.booth_number %></p>
+  <% end %>
+
+<% if @password %>
+  <p> hear are your login credentials
+  <p>Email = <%= @user.email %></p>
+  <p>Password = <%= @password %></p>
+<% end %>

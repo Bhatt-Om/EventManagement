@@ -6,8 +6,9 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email, subject: 'otp for login')
   end
 
-  def booth_allocation(booth, user)
+  def booth_allocation(booth, user, password)
     @booth = booth
+    @password = password
     @user = user
     mail(to: @user.email, subject: 'booth allocation')
   end

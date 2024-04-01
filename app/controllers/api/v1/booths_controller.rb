@@ -37,23 +37,22 @@ class Api::V1::BoothsController < ApplicationController
   end
 
   def booth_user_allocation
-    if @booth
-      user = User.find_by(email: user_params[:email])
-      if user
-        user.update(role_id: user_params[:role_id])
-        @booth.update(user_id: user.id)
-        render json: { message: 'SuccessFully Assigned User'}
+    return render json: { message: 'Booth Not Found', success: false }, status: 404 unless @booth
+    user = User.find_by(email: user_params[:email])
+    if user.nil?
+      user = User.new(user_params.merge(password: SecureRandom.base64(5)))
+      if user.save
+        UserMailer.booth_allocation(@booth, user, user.password).deliver_now
+        @booth.update(user: user)
+        render json: { message: 'Successfully Assigned User' }
       else
-        user = User.new(user_params)
-        if user.save
-          @booth.update(user_id: user.id)
-          render json: { message: 'SuccessFully Assigned User'}
-        else
-          render json: { message: user.errors.full_messages.join('')}
-        end
+        render json: { message: user.errors.full_messages.join(','), success: false }, status: 422
       end
     else
-      render json: { message: 'Booth Not Found', success: false }, status: 404
+      user.update(role_id: user_params[:role_id])
+      UserMailer.booth_allocation(@booth, user, nil).deliver_now
+      @booth.update(user: user)
+      render json: { message: 'Successfully Assigned User' }
     end
   end
 

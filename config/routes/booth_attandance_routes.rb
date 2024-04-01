@@ -4,3 +4,4 @@ resources :booth_attandances do
     put :rejecte_request
   end
 end
+post 'scane_qr/:booth_id', to: 'booth_attandances#scane_qr_code'
