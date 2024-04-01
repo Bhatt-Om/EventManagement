@@ -3,6 +3,7 @@ class Api::V1::ParticipateVolunteersController < ApplicationController
   before_action :set_participate_volunteer, only: %i[destroy approved_request rejected_request generate_qr scan_qr_code ]
   skip_before_action :doorkeeper_authorize!, only: %i[scan_qr_code]
   has_scope :request_type
+  has_scope :task_id
 
   def index
     participate_volunteer = current_user.is_admin? ? ParticipateVolunteer.admin : ParticipateVolunteer.user(current_user.id)

@@ -1,9 +1,10 @@
 class Api::V1::BoothsController < ApplicationController
   before_action :only_for_admin, only: [:create, :update, :destroy, :booth_user_allocation]
   before_action :set_booth, only: [:show, :update, :destroy, :booth_user_allocation]
+  # has_scope :filter_by, using: %i[booth_name booth_number], type: :hash, allow_blank: true
   
   def index
-    booths = Booth.includes(qr_code_attachment: :blob).all
+    booths = Booth.includes(:user, qr_code_attachment: :blob).all
     render json: { message: 'List Of All Booth', booths: booths, success: true }, status: 200
   end
 

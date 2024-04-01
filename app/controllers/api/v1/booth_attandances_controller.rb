@@ -1,10 +1,12 @@
 class Api::V1::BoothAttandancesController < ApplicationController
-  skip_before_action :doorkeeper_authorize, only: %i[ scane_qr_code ]
+  skip_before_action :doorkeeper_authorize!, only: %i[ scane_qr_code ]
   before_action :only_for_admin, only: %i[ update destroy approve_request rejecte_request ]
   before_action :set_booth_attandance, only: %i[ update destroy approve_request rejecte_request ]
-
+  has_scope :booth_id
+  
   def index
     attandances = current_user.is_admin? ? BoothAttandance.all : current_user.booth ? BoothAttandance.where(booth_id: current_user.booth.id) : []
+    attandances = apply_scopes(attandances).all.includes(booth: [:user]).order(id: :desc)
     render json: { message: 'list of all booths attadance', attandances: attandances, success: true }, status: 200
   end
 

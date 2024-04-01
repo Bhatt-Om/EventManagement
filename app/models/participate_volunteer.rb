@@ -9,6 +9,8 @@ class ParticipateVolunteer < ApplicationRecord
   scope :admin, -> { all }
   scope :user, -> user_id { where(user_id: user_id) }
   scope :request_type, -> request_type { where(participate_request: request_type) }
+  scope :task_id, -> task_id { where(task_id: task_id) }
+
 
   after_update :update_score_of_user
 

@@ -8,6 +8,7 @@ class VolunteerPresence < ApplicationRecord
 
   scope :request_type, -> request_type { where(request_type: request_type) }
   scope :requst_status, -> (requst_status = 'pending') { where(requst_status: requst_status) }
+  scope :task_id, -> task_id { joins(:task).where(tasks: { id: task_id }) }
 
   enum request_type: { upload_proof: 0, geo_location: 1, qr_code: 2 }
   enum requst_status: { pending: 0, approved: 1, rejected: 2 }

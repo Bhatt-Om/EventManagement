@@ -46,7 +46,7 @@ class User < ApplicationRecord
         role: role.present? ? role.role_name : '',
         avatar_url: avatar.present? ? url_for(avatar) : '',
         aadhar_card_url: aadhar_card.present? ? url_for(aadhar_card) : '',
-        booth: booth.present? ? booth : false
+        booth: booth.present? ? true : false
       )
   end
 end

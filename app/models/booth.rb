@@ -34,7 +34,8 @@ class Booth < ApplicationRecord
 
   def as_json(options = {})
     super(options).merge(
-      qr_code: qr_code.present? ? url_for(qr_code) : ''
+      qr_code: qr_code.present? ? url_for(qr_code) : '',
+      user_data: user.present? ? user : ''
     )
   end
 end

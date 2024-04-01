@@ -3,6 +3,7 @@ class Api::V1::VolunteerPresencesController < ApplicationController
   before_action :set_volunteer_presence, only: %i[update destroy approved_request rejected_request redeem_point]
   has_scope :request_type
   has_scope :requst_status
+  has_scope :task_id
 
   def index
     volunteer_presences = current_user.is_admin? ? VolunteerPresence.all : current_user.volunteer_presences
