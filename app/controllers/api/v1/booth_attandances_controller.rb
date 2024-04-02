@@ -3,6 +3,8 @@ class Api::V1::BoothAttandancesController < ApplicationController
   before_action :only_for_admin, only: %i[ update destroy approve_request rejecte_request ]
   before_action :set_booth_attandance, only: %i[ update destroy approve_request rejecte_request ]
   has_scope :booth_id
+  has_scope :request_type
+  has_scope :request_stats
   
   def index
     attandances = current_user.is_admin? ? BoothAttandance.all : current_user.booth ? BoothAttandance.where(booth_id: current_user.booth.id) : []
@@ -14,6 +16,7 @@ class Api::V1::BoothAttandancesController < ApplicationController
     booth_attandance = BoothAttandance.new(booth_attandance_params)
      if booth_attandance.user_lat && booth_attandance.user_lot
       distance = booth_attandance.distance_between(booth_attandance.booth.booth_lat, booth_attandance.booth.booth_lon, booth_attandance.user_lat, booth_attandance.user_lot)
+      booth_attandance.distance = distance
       if distance <= 0.1000
         booth_attandance.request_stats = 'approved'
       end
@@ -76,7 +79,7 @@ class Api::V1::BoothAttandancesController < ApplicationController
   private
 
   def booth_attandance_params
-    params.require(:booth_attandance).permit(:booth_id, :date, :time, :request_type, :request_stats, :user_lat, :user_lot, :image)
+    params.require(:booth_attandance).permit(:booth_id, :date, :time, :request_type, :request_stats, :user_lat, :user_lot, :image, :distance)
   end
 
   def set_booth_attandance

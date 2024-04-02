@@ -7,6 +7,8 @@ class BoothAttandance < ApplicationRecord
   enum request_stats: { pending: 0, approved: 1, rejected: 2 }
   
   scope :booth_id, -> booth_id { where(booth_id: booth_id) }
+  scope :request_type, -> request_type { where(request_type: request_type) }
+  scope :request_stats, -> request_stats { where(request_stats: request_stats) }
 
   def as_json(options = {})
     super(options).merge(

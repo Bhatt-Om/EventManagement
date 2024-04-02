@@ -17,12 +17,26 @@ class Api::V1::VolunteerPresencesController < ApplicationController
     if volunteer_presence.persisted?
       return render json: { message: 'Already Uplodad' , success: true }, status: 200
     end
-
+    
     volunteer_presence.assign_attributes(volunteer_presence_params.slice(
       :request_type,
       :requst_status,
-      :location
-    )) 
+      :location,
+      :volunteer_lon,
+      :volunteer_lat
+    ))
+
+    if volunteer_presence.volunteer_lat && volunteer_presence.volunteer_lon
+      distance = volunteer_presence.distance_between(volunteer_presence.task.task_lat, volunteer_presence.task.task_lon, volunteer_presence.volunteer_lat, volunteer_presence.volunteer_lon)
+      volunteer_presence.distance = distance
+      if distance <= 0.1000
+        ActiveRecord::Base.transaction do
+          volunteer_presence.user.update(points: (volunteer_presence.user.points.to_i + volunteer_presence.task.points.to_i).to_s)
+        end
+        volunteer_presence.requst_status = 1
+      end
+     end
+
     volunteer_presence.upload_proof.attach(volunteer_presence_params['upload_proof']) if volunteer_presence_params['upload_proof']
     if volunteer_presence.save
       render json: { message: 'Success Fully Submited', success: true }, status: 200
@@ -54,8 +68,11 @@ class Api::V1::VolunteerPresencesController < ApplicationController
 
   def approved_request
     if @volunteer_presence
-      @volunteer_presence.update(requst_status: 1)
-      render json: { message: 'SuccessFully Approved', success: true }, status: 200
+      ActiveRecord::Base.transaction do
+        @volunteer_presence.user.update(points: (@volunteer_presence.user.points.to_i + @volunteer_presence.task.points.to_i).to_s)
+        @volunteer_presence.update(requst_status: 1)
+        render json: { message: 'SuccessFully Approved', success: true }, status: 200
+      end
     else
       render json: { message: 'Not Found', success: false }, status: 404
     end
@@ -90,7 +107,7 @@ class Api::V1::VolunteerPresencesController < ApplicationController
   private
 
   def volunteer_presence_params
-    params.require(:volunteer_presence).permit(:participate_volunteer_id, :request_type, :requst_status, :location, :upload_proof)
+    params.require(:volunteer_presence).permit(:participate_volunteer_id, :request_type, :requst_status, :location, :volunteer_lon, :volunteer_lat, :upload_proof)
   end
 
   def set_volunteer_presence

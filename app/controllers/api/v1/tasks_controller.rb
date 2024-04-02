@@ -43,6 +43,6 @@ class Api::V1::TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:event_name, :event_location, :google_link, :date, :time, :other_instruction, :points, :event_poster)
+    params.require(:task).permit(:event_name, :event_location, :google_link, :date, :time, :other_instruction, :points, :task_lat, :task_lon, :event_poster)
   end
 end

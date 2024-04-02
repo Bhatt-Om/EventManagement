@@ -4,7 +4,7 @@ class Api::V1::BoothsController < ApplicationController
   # has_scope :filter_by, using: %i[booth_name booth_number], type: :hash, allow_blank: true
   
   def index
-    booths = Booth.includes(:user, qr_code_attachment: :blob).all
+    booths = Booth.includes(:user, qr_code_attachment: :blob).all.order(id: :desc)
     render json: { message: 'List Of All Booth', booths: booths, success: true }, status: 200
   end
 

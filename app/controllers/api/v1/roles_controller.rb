@@ -3,7 +3,7 @@ before_action :only_for_admin
 before_action :set_role, only: %i[ update destroy ]
   
   def index
-    roles = Role.all
+    roles = Role.all.order(id: :desc)
     render json: { message: 'List Of All Roles', roles: roles, success: true }, status: 200
   end
 

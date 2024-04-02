@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_26_123151) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_02_054358) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,6 +52,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_26_123151) do
     t.integer "request_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "distance", default: "0"
     t.index ["booth_id"], name: "index_booth_attandances_on_booth_id"
   end
 
@@ -119,12 +120,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_26_123151) do
     t.string "points", default: "0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "user_roles", force: :cascade do |t|
-    t.string "role_name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "task_lat", default: "0"
+    t.string "task_lon", default: "0"
   end
 
   create_table "users", force: :cascade do |t|
@@ -158,6 +155,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_26_123151) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "redeemed_points", default: false
+    t.string "distance", default: "0"
+    t.string "volunteer_lat", default: "0"
+    t.string "volunteer_lon", default: "0"
     t.index ["participate_volunteer_id"], name: "index_volunteer_presences_on_participate_volunteer_id"
   end
 

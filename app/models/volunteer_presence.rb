@@ -4,6 +4,8 @@ class VolunteerPresence < ApplicationRecord
   has_one :task, through: :participate_volunteer
   has_one :qr_code, through: :participate_volunteer, source: :qr_code_attachment
   has_one_attached :upload_proof, dependent: :destroy
+  validates :volunteer_lat, presence: true
+  validates :volunteer_lon, presence: true
   before_create :set_date_and_time
 
   scope :request_type, -> request_type { where(request_type: request_type) }
