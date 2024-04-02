@@ -120,8 +120,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_02_054358) do
     t.string "points", default: "0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "task_lat", default: "0"
-    t.string "task_lon", default: "0"
+    t.float "task_lat", default: 0.0
+    t.float "task_lon", default: 0.0
   end
 
   create_table "users", force: :cascade do |t|
@@ -156,8 +156,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_02_054358) do
     t.datetime "updated_at", null: false
     t.boolean "redeemed_points", default: false
     t.string "distance", default: "0"
-    t.string "volunteer_lat", default: "0"
-    t.string "volunteer_lon", default: "0"
+    t.float "volunteer_lat", default: 0.0
+    t.float "volunteer_lon", default: 0.0
     t.index ["participate_volunteer_id"], name: "index_volunteer_presences_on_participate_volunteer_id"
   end
 

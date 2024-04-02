@@ -30,10 +30,10 @@ if !Role.where(role_name: 'admin').any?
 end
 
 if Rails.env.development? && !Task.any?
-  500.times { |num| Task.create!(event_name: "Event #{num + 1}",other_instruction: 'thank you for joining', event_location: 'location', google_link: 'link', date: Date.today.strftime("%d/%m/%Y"), time: Time.now.strftime('%H:%M:%S'), points: '100', task_lat: (23.0 +"0.#{num +1 }".to_f).to_s, task_lon: (72.0 +"0.#{num +1 }".to_f).to_s)}
+  500.times { |num| Task.create!(event_name: "Event #{num + 1}",other_instruction: 'thank you for joining', event_location: 'location', google_link: 'link', date: Date.today.strftime("%d/%m/%Y"), time: Time.now.strftime('%H:%M:%S'), points: '100', task_lat: (23.0 +"0.#{num +1 }".to_f), task_lon: (72.0 +"0.#{num +1 }".to_f))}
 end
 
 
 if Rails.env.development? && !Booth.any?
-  50.times { |num| Booth.create!(booth_name: "booth_name #{num + 1}",booth_number: "#{num+1}", booth_lat: (23.0 +"0.#{num +1 }".to_f).to_s, booth_lon: (72.0 +"0.#{num +1 }".to_f).to_s) }
+  50.times { |num| Booth.create!(booth_name: "booth_name #{num + 1}",booth_number: "#{num+1}", booth_lat: (23.0 +"0.#{num +1 }".to_f), booth_lon: (72.0 +"0.#{num +1 }".to_f)) }
 end
