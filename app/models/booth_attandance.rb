@@ -13,7 +13,8 @@ class BoothAttandance < ApplicationRecord
   def as_json(options = {})
     super(options).merge(
       booth:  lambda { |u| u.slice('booth_name', 'booth_number') }.call(booth),
-      user: booth.user.present? ?  lambda { |u| u.slice('name', 'email') }.call(booth.user) : ''
+      user: booth.user.present? ?  lambda { |u| u.slice('name', 'email') }.call(booth.user) : '',
+      image_url: image.present? ? url_for(image) : ''
     )
   end
 end
