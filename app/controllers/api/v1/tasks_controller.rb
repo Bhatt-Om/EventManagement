@@ -38,10 +38,10 @@ class Api::V1::TasksController < ApplicationController
           if tpv&.volunteer_presence.present? && tpv&.volunteer_presence.approved? && !tpv&.volunteer_presence.redeemed?
             tpv.user.update(points: (tpv.user.points.to_i - tpv.task.points.to_i).to_s)
           end
-          task.destroy
-          render json: {message: 'Task Deleted SuccessFully', success: true }, status: 200
         end
-      end
+    end
+      task.destroy
+      render json: {message: 'Task Deleted SuccessFully', success: true }, status: 200
     else
       render json: {message: 'task not found', success: false }, status: 404
     end
