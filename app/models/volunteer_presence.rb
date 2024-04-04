@@ -22,6 +22,10 @@ class VolunteerPresence < ApplicationRecord
     )
   end
 
+  def redeemed?
+    redeemed_points
+  end
+
   def set_date_and_time
     self.date = Date.today.strftime("%d/%m/%Y")
     self.time = Time.now.strftime('%H:%M:%S')

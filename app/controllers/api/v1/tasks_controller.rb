@@ -32,11 +32,18 @@ class Api::V1::TasksController < ApplicationController
 
   def destroy
     task = Task.find_by(id: params[:id])
-    if task
-      task.destroy
-      render json: {message: 'Task Deleted SuccessFully', success: true }, status: 200
+    if task.present?
+      ActiveRecord::Base.transaction do
+        task&.participate_volunteers&.each do |tpv|
+          if tpv&.volunteer_presence.present? && tpv&.volunteer_presence.approved? && !tpv&.volunteer_presence.redeemed?
+            tpv.user.update(points: (tpv.user.points.to_i - tpv.task.points.to_i).to_s)
+          end
+          task.destroy
+          render json: {message: 'Task Deleted SuccessFully', success: true }, status: 200
+        end
+      end
     else
-      render json: {message: task.errors.full_messages.join(','), success: false }, status: 404
+      render json: {message: 'task not found', success: false }, status: 404
     end
   end
 
